@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Response on Gin Web Framework</title>
+    <link>https://gin-gonic.com/documentation/response/</link>
+    <description>Recent content in Response on Gin Web Framework</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://gin-gonic.com/documentation/response/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Different formats</title>
+      <link>https://gin-gonic.com/documentation/response/different_formats/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/response/different_formats/</guid>
+      <description>Responding can be as easy as passing just the Status code and a structure representing the data you want to send.
+func main() { r := gin.Default() // gin.H is a shortcut for map[string]interface{} r.GET(&amp;quot;/someJSON&amp;quot;, func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{&amp;quot;message&amp;quot;: &amp;quot;hey&amp;quot;, &amp;quot;status&amp;quot;: http.StatusOK}) }) r.GET(&amp;quot;/moreJSON&amp;quot;, func(c *gin.Context) { // You also can use a struct var msg struct { Name string `json:&amp;quot;user&amp;quot;` Message string Number int } msg.Name = &amp;quot;Lena&amp;quot; msg.</description>
+    </item>
+    
+    <item>
+      <title>More JSON</title>
+      <link>https://gin-gonic.com/documentation/response/json/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/response/json/</guid>
+      <description>SecureJSON Using SecureJSON to prevent json hijacking. Default prepends &amp;quot;while(1),&amp;quot; to response body if the given struct is array values.
+func main() { r := gin.Default() // You can also use your own secure json prefix // r.SecureJsonPrefix(&amp;quot;)]}&#39;,\n&amp;quot;) r.GET(&amp;quot;/someJSON&amp;quot;, func(c *gin.Context) { names := []string{&amp;quot;lena&amp;quot;, &amp;quot;austin&amp;quot;, &amp;quot;foo&amp;quot;} // Will output	:	while(1);[&amp;quot;lena&amp;quot;,&amp;quot;austin&amp;quot;,&amp;quot;foo&amp;quot;] c.SecureJSON(http.StatusOK, names) }) // Listen and serve on 0.0.0.0:8080 r.Run(&amp;quot;:8080&amp;quot;) }  JSONP Using JSONP to request data from a server in a different domain.</description>
+    </item>
+    
+    <item>
+      <title>Static files</title>
+      <link>https://gin-gonic.com/documentation/response/static/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/response/static/</guid>
+      <description>You can use one of these methods Static(...), StaticFS(...) or StaticFile(...)
+func main() { router := gin.Default() router.Static(&amp;quot;/assets&amp;quot;, &amp;quot;./assets&amp;quot;) router.StaticFS(&amp;quot;/more_static&amp;quot;, http.Dir(&amp;quot;my_file_system&amp;quot;)) router.StaticFile(&amp;quot;/favicon.ico&amp;quot;, &amp;quot;./resources/favicon.ico&amp;quot;) // Listen and serve on 0.0.0.0:8080 router.Run(&amp;quot;:8080&amp;quot;) }  </description>
+    </item>
+    
+    <item>
+      <title>From a reader</title>
+      <link>https://gin-gonic.com/documentation/response/reader/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/response/reader/</guid>
+      <description>If you don&amp;rsquo;t have the data you&amp;rsquo;ll send to the response but are reading it from somewhere else you can use DataFromReader(...) method
+func main() { router := gin.Default() router.GET(&amp;quot;/someDataFromReader&amp;quot;, func(c *gin.Context) { response, err := http.Get(&amp;quot;https://raw.githubusercontent.com/gin-gonic/logo/master/color.png&amp;quot;) if err != nil || response.StatusCode != http.StatusOK { c.Status(http.StatusServiceUnavailable) return } reader := response.Body contentLength := response.ContentLength contentType := response.Header.Get(&amp;quot;Content-Type&amp;quot;) extraHeaders := map[string]string{ &amp;quot;Content-Disposition&amp;quot;: `attachment; filename=&amp;quot;gopher.png&amp;quot;`, } c.DataFromReader(http.StatusOK, contentLength, contentType, reader, extraHeaders) }) router.</description>
+    </item>
+    
+    <item>
+      <title>HTML</title>
+      <link>https://gin-gonic.com/documentation/response/html/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/response/html/</guid>
+      <description>Using LoadHTMLGlob() or LoadHTMLFiles()
+func main() { router := gin.Default() router.LoadHTMLGlob(&amp;quot;templates/*&amp;quot;) //router.LoadHTMLFiles(&amp;quot;templates/template1.html&amp;quot;, &amp;quot;templates/template2.html&amp;quot;) router.GET(&amp;quot;/index&amp;quot;, func(c *gin.Context) { c.HTML(http.StatusOK, &amp;quot;index.tmpl&amp;quot;, gin.H{ &amp;quot;title&amp;quot;: &amp;quot;Main website&amp;quot;, }) }) router.Run(&amp;quot;:8080&amp;quot;) }  templates/index.tmpl
+&amp;lt;html&amp;gt; &amp;lt;h1&amp;gt; {{ .title }} &amp;lt;/h1&amp;gt; &amp;lt;/html&amp;gt;  Using templates with same name in different directories
+func main() { router := gin.Default() router.LoadHTMLGlob(&amp;quot;templates/**/*&amp;quot;) router.GET(&amp;quot;/posts/index&amp;quot;, func(c *gin.Context) { c.HTML(http.StatusOK, &amp;quot;posts/index.tmpl&amp;quot;, gin.H{ &amp;quot;title&amp;quot;: &amp;quot;Posts&amp;quot;, }) }) router.GET(&amp;quot;/users/index&amp;quot;, func(c *gin.Context) { c.HTML(http.StatusOK, &amp;quot;users/index.tmpl&amp;quot;, gin.</description>
+    </item>
+    
+    <item>
+      <title>Multitemplate</title>
+      <link>https://gin-gonic.com/documentation/response/multitemplate/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/response/multitemplate/</guid>
+      <description>Gin allows by default the use of only one html.Template. Check a multitemplate render for using features like go 1.6 block template.</description>
+    </item>
+    
+  </channel>
+</rss>

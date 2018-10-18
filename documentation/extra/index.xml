@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Extra on Gin Web Framework</title>
+    <link>https://gin-gonic.com/documentation/extra/</link>
+    <description>Recent content in Extra on Gin Web Framework</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://gin-gonic.com/documentation/extra/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Custom configuration</title>
+      <link>https://gin-gonic.com/documentation/extra/custom_config/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/extra/custom_config/</guid>
+      <description>Use http.ListenAndServe() directly, like this:
+func main() { router := gin.Default() http.ListenAndServe(&amp;quot;:8080&amp;quot;, router) }  or
+func main() { router := gin.Default() s := &amp;amp;http.Server{ Addr: &amp;quot;:8080&amp;quot;, Handler: router, ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second, MaxHeaderBytes: 1 &amp;lt;&amp;lt; 20, } s.ListenAndServe() }  </description>
+    </item>
+    
+    <item>
+      <title>Let&#39;s Encrypt</title>
+      <link>https://gin-gonic.com/documentation/extra/lets_encrypt/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/extra/lets_encrypt/</guid>
+      <description>Example for 1-line LetsEncrypt HTTPS servers.
+package main import ( &amp;quot;log&amp;quot; &amp;quot;github.com/gin-gonic/autotls&amp;quot; &amp;quot;github.com/gin-gonic/gin&amp;quot; ) func main() { r := gin.Default() // Ping handler r.GET(&amp;quot;/ping&amp;quot;, func(c *gin.Context) { c.String(200, &amp;quot;pong&amp;quot;) }) log.Fatal(autotls.Run(r, &amp;quot;example1.com&amp;quot;, &amp;quot;example2.com&amp;quot;)) }  Example for custom autocert manager.
+package main import ( &amp;quot;log&amp;quot; &amp;quot;github.com/gin-gonic/autotls&amp;quot; &amp;quot;github.com/gin-gonic/gin&amp;quot; &amp;quot;golang.org/x/crypto/acme/autocert&amp;quot; ) func main() { r := gin.Default() // Ping handler r.GET(&amp;quot;/ping&amp;quot;, func(c *gin.Context) { c.String(200, &amp;quot;pong&amp;quot;) }) m := autocert.Manager{ Prompt: autocert.AcceptTOS, HostPolicy: autocert.</description>
+    </item>
+    
+    <item>
+      <title>Multiple servers</title>
+      <link>https://gin-gonic.com/documentation/extra/multiple_servers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/extra/multiple_servers/</guid>
+      <description>See the question and try the following example:
+package main import ( &amp;quot;log&amp;quot; &amp;quot;net/http&amp;quot; &amp;quot;time&amp;quot; &amp;quot;github.com/gin-gonic/gin&amp;quot; &amp;quot;golang.org/x/sync/errgroup&amp;quot; ) var ( g errgroup.Group ) func router01() http.Handler { e := gin.New() e.Use(gin.Recovery()) e.GET(&amp;quot;/&amp;quot;, func(c *gin.Context) { c.JSON( http.StatusOK, gin.H{ &amp;quot;code&amp;quot;: http.StatusOK, &amp;quot;error&amp;quot;: &amp;quot;Welcome server 01&amp;quot;, }, ) }) return e } func router02() http.Handler { e := gin.New() e.Use(gin.Recovery()) e.GET(&amp;quot;/&amp;quot;, func(c *gin.Context) { c.JSON( http.StatusOK, gin.H{ &amp;quot;code&amp;quot;: http.StatusOK, &amp;quot;error&amp;quot;: &amp;quot;Welcome server 02&amp;quot;, }, ) }) return e } func main() { server01 := &amp;amp;http.</description>
+    </item>
+    
+    <item>
+      <title>Graceful restart</title>
+      <link>https://gin-gonic.com/documentation/extra/graceful/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/extra/graceful/</guid>
+      <description>Do you want to graceful restart or stop your web server? There are some ways this can be done.
+We can use fvbock/endless to replace the default ListenAndServe. Refer issue #296 for more details.
+router := gin.Default() router.GET(&amp;quot;/&amp;quot;, handler) // [...] endless.ListenAndServe(&amp;quot;:4242&amp;quot;, router)  An alternative to endless:
+ manners: A polite Go HTTP server that shuts down gracefully. graceful: Graceful is a Go package enabling graceful shutdown of an http.</description>
+    </item>
+    
+    <item>
+      <title>Single binary</title>
+      <link>https://gin-gonic.com/documentation/extra/single_binary/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/extra/single_binary/</guid>
+      <description>You can build a server into a single binary containing templates by using go-assets.
+func main() { r := gin.New() t, err := loadTemplate() if err != nil { panic(err) } r.SetHTMLTemplate(t) r.GET(&amp;quot;/&amp;quot;, func(c *gin.Context) { c.HTML(http.StatusOK, &amp;quot;/html/index.tmpl&amp;quot;,nil) }) r.Run(&amp;quot;:8080&amp;quot;) } // loadTemplate loads templates embedded by go-assets-builder func loadTemplate() (*template.Template, error) { t := template.New(&amp;quot;&amp;quot;) for name, file := range Assets.Files { if file.IsDir() || !strings.HasSuffix(name, &amp;quot;.tmpl&amp;quot;) { continue } h, err := ioutil.</description>
+    </item>
+    
+    <item>
+      <title>Server push</title>
+      <link>https://gin-gonic.com/documentation/extra/server_push/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/extra/server_push/</guid>
+      <description>http.Pusher is supported only go1.8+. See the golang blog for detail information.
+package main import ( &amp;quot;html/template&amp;quot; &amp;quot;log&amp;quot; &amp;quot;github.com/gin-gonic/gin&amp;quot; ) var html = template.Must(template.New(&amp;quot;https&amp;quot;).Parse(` &amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Https Test&amp;lt;/title&amp;gt; &amp;lt;script src=&amp;quot;/assets/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;h1 style=&amp;quot;color:red;&amp;quot;&amp;gt;Welcome, Ginner!&amp;lt;/h1&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; `)) func main() { r := gin.Default() r.Static(&amp;quot;/assets&amp;quot;, &amp;quot;./assets&amp;quot;) r.SetHTMLTemplate(html) r.GET(&amp;quot;/&amp;quot;, func(c *gin.Context) { if pusher := c.Writer.Pusher(); pusher != nil { // use pusher.Push() to do server push if err := pusher.Push(&amp;quot;/assets/app.js&amp;quot;, nil); err !</description>
+    </item>
+    
+    <item>
+      <title>Log routes</title>
+      <link>https://gin-gonic.com/documentation/extra/log_routes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/extra/log_routes/</guid>
+      <description>The default log of routes is:
+[GIN-debug] POST /foo --&amp;gt; main.main.func1 (3 handlers) [GIN-debug] GET /bar --&amp;gt; main.main.func2 (3 handlers) [GIN-debug] GET /status --&amp;gt; main.main.func3 (3 handlers)  If you want to log this information in given format (e.g. JSON, key values or something else), then you can define this format with gin.DebugPrintRouteFunc. In the example below, we log all routes with standard log package but you can use another log tools that suits of your needs.</description>
+    </item>
+    
+  </channel>
+</rss>

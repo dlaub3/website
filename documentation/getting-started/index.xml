@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Getting started on Gin Web Framework</title>
+    <link>https://gin-gonic.com/documentation/getting-started/</link>
+    <description>Recent content in Getting started on Gin Web Framework</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 25 Sep 2018 16:57:20 +0200</lastBuildDate>
+    
+	<atom:link href="https://gin-gonic.com/documentation/getting-started/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Installation</title>
+      <link>https://gin-gonic.com/documentation/getting-started/installation/</link>
+      <pubDate>Tue, 25 Sep 2018 16:57:20 +0200</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/getting-started/installation/</guid>
+      <description>To install Gin package, you need to install Go and set your Go workspace first.
+ Download and install it:
+go get -u github.com/gin-gonic/gin   Import it in your code:  import &amp;quot;github.com/gin-gonic/gin&amp;quot;  (Optional) Import net/http. This is required for example if using constants such as http.StatusOK.
+import &amp;quot;net/http&amp;quot;   Copy a starting template inside your project  curl https://raw.githubusercontent.com/gin-gonic/gin/master/examples/basic/main.go &amp;gt; main.go  Run your project
+go run main.</description>
+    </item>
+    
+    <item>
+      <title>Quick start</title>
+      <link>https://gin-gonic.com/documentation/getting-started/quick_start/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/getting-started/quick_start/</guid>
+      <description>Assume the following code in example.go file
+$ cat example.go  package main import &amp;quot;github.com/gin-gonic/gin&amp;quot; func main() { r := gin.Default() r.GET(&amp;quot;/ping&amp;quot;, func(c *gin.Context) { c.JSON(200, gin.H{ &amp;quot;message&amp;quot;: &amp;quot;pong&amp;quot;, }) }) r.Run() // listen and serve on 0.0.0.0:8080 }  You can run the server like so
+$ go run example.go  and visit 0.0.0.0:8080/ping on your browser.</description>
+    </item>
+    
+    <item>
+      <title>Vendoring</title>
+      <link>https://gin-gonic.com/documentation/getting-started/vendor/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/getting-started/vendor/</guid>
+      <description> go get govendor
+go get github.com/kardianos/govendor   Create your project folder and cd inside  mkdir -p $GOPATH/src/github.com/myusername/project &amp;amp;&amp;amp; cd &amp;quot;$_&amp;quot;  Vendor init your project and add gin
+govendor init  govendor fetch github.com/gin-gonic/gin@v1.3  Copy a starting template inside your project
+curl https://raw.githubusercontent.com/gin-gonic/gin/master/examples/basic/main.go &amp;gt; main.go   Run your project  go run main.go   </description>
+    </item>
+    
+    <item>
+      <title>Build with jsoniter</title>
+      <link>https://gin-gonic.com/documentation/getting-started/jsoninter/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/getting-started/jsoninter/</guid>
+      <description>Gin uses encoding/json as default json package but you can change to jsoniter by build from other tags.
+$ go build -tags=jsoniter .  </description>
+    </item>
+    
+  </channel>
+</rss>

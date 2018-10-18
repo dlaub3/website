@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+
+
+<title>Multiple binding</title>
+
+<meta name="generator" content="Hugo 0.50-DEV" />
+
+
+<link rel="stylesheet" href="https://gin-gonic.com/css/owl.carousel.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace-local-fonts.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/style.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/ionicons.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/animate.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/responsive.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/syntax.css" />
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="https://gin-gonic.com/js/bootstrap.min.js"></script>
+<script src="https://gin-gonic.com/js/owl.carousel.min.js"></script>
+<script src="https://gin-gonic.com/js/plugins.js"></script>
+<script src="https://gin-gonic.com/js/min/waypoints.min.js"></script>
+<script src="https://gin-gonic.com/js/jquery.counterup.js"></script>
+
+
+<script src="https://gin-gonic.com/js/main.js"></script>
+
+
+
+</head>
+<body>
+
+	
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://gin-gonic.com/">
+              <img src="https://gin-gonic.com/img/logo.png" alt="Gin Web Framework Logo">
+            </a>
+          </div>
+            
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://gin-gonic.com/">Home</a></li>
+              
+                <li><a href="/documentation/">Documentation</a></li>
+              
+                <li><a href="#/">Middleware</a></li>
+              
+                <li><a href="#/">Github</a></li>
+              
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+	<div class="post">
+	  
+	  <section class="section" style="border: 1px dotted #ddd;">
+	    <div class="container">
+	      <div class="row">
+	        <div>
+	          <div class="block">
+							
+	            <h1>Multiple binding</h1>
+	            <div class="post-info-wrapper">
+	              <p class="italic">By <span class="bold"></span> on <span class="bold">Jan 1, 0001</span></p>
+	            </div>
+	            <hr />
+	            <p><p>The normal methods for binding consume <code>c.Request.Body</code> and they
+cannot be called multiple times.</p>
+
+<pre><code class="language-go">type formA struct {
+	Foo string `json:&quot;foo&quot; xml:&quot;foo&quot; binding:&quot;required&quot;`
+}
+
+type formB struct {
+	Bar string `json:&quot;bar&quot; xml:&quot;bar&quot; binding:&quot;required&quot;`
+}
+
+func SomeHandler(c *gin.Context) {
+	objA := formA{}
+	objB := formB{}
+	// This c.ShouldBind consumes c.Request.Body and it cannot be reused.
+	if errA := c.ShouldBind(&amp;objA); errA == nil {
+		c.String(http.StatusOK, `the body should be formA`)
+	// Always an error is occurred by this because c.Request.Body is EOF now.
+	} else if errB := c.ShouldBind(&amp;objB); errB == nil {
+		c.String(http.StatusOK, `the body should be formB`)
+	} else {
+		...
+	}
+}
+</code></pre>
+
+<p>For this, you can use <code>c.ShouldBindBodyWith</code>.</p>
+
+<pre><code class="language-go">func SomeHandler(c *gin.Context) {
+	objA := formA{}
+	objB := formB{}
+	// This reads c.Request.Body and stores the result into the context.
+	if errA := c.ShouldBindBodyWith(&amp;objA, binding.JSON); errA == nil {
+		c.String(http.StatusOK, `the body should be formA`)
+	// At this time, it reuses body stored in the context.
+	} else if errB := c.ShouldBindBodyWith(&amp;objB, binding.JSON); errB == nil {
+		c.String(http.StatusOK, `the body should be formB JSON`)
+	// And it can accepts other formats
+	} else if errB2 := c.ShouldBindBodyWith(&amp;objB, binding.XML); errB2 == nil {
+		c.String(http.StatusOK, `the body should be formB XML`)
+	} else {
+		...
+	}
+}
+</code></pre>
+
+<div class="info"> `c.ShouldBindBodyWith` stores body into the context before binding. This has
+a slight impact to performance, so you should not use this method if you are
+enough to call binding at once.</div>
+
+<div class="info">This feature is only needed for some formats -- `JSON`, `XML`, `MsgPack`,
+`ProtoBuf`. For other formats, `Query`, `Form`, `FormPost`, `FormMultipart`,
+can be called by `c.ShouldBind()` multiple times without any damage to
+performance (See [#1341](https://github.com/gin-gonic/gin/pull/1341)).</div>
+</p>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </section>
+	</div>
+	<p class="center-text" style="padding: 30px;">
+	  <a class="btn btn-main" href="https://gin-gonic.com/documentation/binding/">Back to Binding data</a>
+	</p>
+
+	
+
+	
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            
+            <li><a href="#">About</a></li>
+            
+            <li><a href="#">Gitter</a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by Themefisher. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

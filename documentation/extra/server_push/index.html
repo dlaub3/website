@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+
+
+<title>Server push</title>
+
+<meta name="generator" content="Hugo 0.50-DEV" />
+
+
+<link rel="stylesheet" href="https://gin-gonic.com/css/owl.carousel.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace-local-fonts.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/style.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/ionicons.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/animate.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/responsive.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/syntax.css" />
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="https://gin-gonic.com/js/bootstrap.min.js"></script>
+<script src="https://gin-gonic.com/js/owl.carousel.min.js"></script>
+<script src="https://gin-gonic.com/js/plugins.js"></script>
+<script src="https://gin-gonic.com/js/min/waypoints.min.js"></script>
+<script src="https://gin-gonic.com/js/jquery.counterup.js"></script>
+
+
+<script src="https://gin-gonic.com/js/main.js"></script>
+
+
+
+</head>
+<body>
+
+	
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://gin-gonic.com/">
+              <img src="https://gin-gonic.com/img/logo.png" alt="Gin Web Framework Logo">
+            </a>
+          </div>
+            
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://gin-gonic.com/">Home</a></li>
+              
+                <li><a href="/documentation/">Documentation</a></li>
+              
+                <li><a href="#/">Middleware</a></li>
+              
+                <li><a href="#/">Github</a></li>
+              
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+	<div class="post">
+	  
+	  <section class="section" style="border: 1px dotted #ddd;">
+	    <div class="container">
+	      <div class="row">
+	        <div>
+	          <div class="block">
+							
+	            <h1>Server push</h1>
+	            <div class="post-info-wrapper">
+	              <p class="italic">By <span class="bold"></span> on <span class="bold">Jan 1, 0001</span></p>
+	            </div>
+	            <hr />
+	            <p><p>http.Pusher is supported only <strong>go1.8+</strong>. See the <a href="https://blog.golang.org/h2push">golang blog</a> for detail information.</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;html/template&quot;
+	&quot;log&quot;
+
+	&quot;github.com/gin-gonic/gin&quot;
+)
+
+var html = template.Must(template.New(&quot;https&quot;).Parse(`
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Https Test&lt;/title&gt;
+  &lt;script src=&quot;/assets/app.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1 style=&quot;color:red;&quot;&gt;Welcome, Ginner!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+`))
+
+func main() {
+	r := gin.Default()
+	r.Static(&quot;/assets&quot;, &quot;./assets&quot;)
+	r.SetHTMLTemplate(html)
+
+	r.GET(&quot;/&quot;, func(c *gin.Context) {
+		if pusher := c.Writer.Pusher(); pusher != nil {
+			// use pusher.Push() to do server push
+			if err := pusher.Push(&quot;/assets/app.js&quot;, nil); err != nil {
+				log.Printf(&quot;Failed to push: %v&quot;, err)
+			}
+		}
+		c.HTML(200, &quot;https&quot;, gin.H{
+			&quot;status&quot;: &quot;success&quot;,
+		})
+	})
+
+	// Listen and Server in https://127.0.0.1:8080
+	r.RunTLS(&quot;:8080&quot;, &quot;./testdata/server.pem&quot;, &quot;./testdata/server.key&quot;)
+}
+</code></pre>
+</p>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </section>
+	</div>
+	<p class="center-text" style="padding: 30px;">
+	  <a class="btn btn-main" href="https://gin-gonic.com/documentation/extra/">Back to Extra</a>
+	</p>
+
+	
+
+	
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            
+            <li><a href="#">About</a></li>
+            
+            <li><a href="#">Gitter</a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by Themefisher. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

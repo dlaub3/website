@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Binding data on Gin Web Framework</title>
+    <link>https://gin-gonic.com/documentation/binding/</link>
+    <description>Recent content in Binding data on Gin Web Framework</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://gin-gonic.com/documentation/binding/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Custom validators</title>
+      <link>https://gin-gonic.com/documentation/binding/custom_validators/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/binding/custom_validators/</guid>
+      <description>It is also possible to register custom validators. See the example code.
+package main import ( &amp;quot;net/http&amp;quot; &amp;quot;reflect&amp;quot; &amp;quot;time&amp;quot; &amp;quot;github.com/gin-gonic/gin&amp;quot; &amp;quot;github.com/gin-gonic/gin/binding&amp;quot; &amp;quot;gopkg.in/go-playground/validator.v8&amp;quot; ) // Booking contains binded and validated data. type Booking struct { CheckIn time.Time `form:&amp;quot;check_in&amp;quot; binding:&amp;quot;required,bookabledate&amp;quot; time_format:&amp;quot;2006-01-02&amp;quot;` CheckOut time.Time `form:&amp;quot;check_out&amp;quot; binding:&amp;quot;required,gtfield=CheckIn&amp;quot; time_format:&amp;quot;2006-01-02&amp;quot;` } func bookableDate( v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string, ) bool { if date, ok := field.Interface().(time.Time); ok { today := time.</description>
+    </item>
+    
+    <item>
+      <title>From query</title>
+      <link>https://gin-gonic.com/documentation/binding/query/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/binding/query/</guid>
+      <description>ShouldBindQuery function only binds the query params and not the post data. See the detail information.
+package main import ( &amp;quot;log&amp;quot; &amp;quot;github.com/gin-gonic/gin&amp;quot; ) type Person struct { Name string `form:&amp;quot;name&amp;quot;` Address string `form:&amp;quot;address&amp;quot;` } func main() { route := gin.Default() route.Any(&amp;quot;/testing&amp;quot;, startPage) route.Run(&amp;quot;:8085&amp;quot;) } func startPage(c *gin.Context) { var person Person if c.ShouldBindQuery(&amp;amp;person) == nil { log.Println(&amp;quot;====== Only Bind By Query String ======&amp;quot;) log.Println(person.Name) log.Println(person.Address) } c.String(200, &amp;quot;Success&amp;quot;) }  </description>
+    </item>
+    
+    <item>
+      <title>Query or post</title>
+      <link>https://gin-gonic.com/documentation/binding/query_post/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/binding/query_post/</guid>
+      <description>See the detail information.
+package main import ( &amp;quot;log&amp;quot; &amp;quot;time&amp;quot; &amp;quot;github.com/gin-gonic/gin&amp;quot; ) type Person struct { Name string `form:&amp;quot;name&amp;quot;` Address string `form:&amp;quot;address&amp;quot;` Birthday time.Time `form:&amp;quot;birthday&amp;quot; time_format:&amp;quot;2006-01-02&amp;quot; time_utc:&amp;quot;1&amp;quot;` } func main() { route := gin.Default() route.GET(&amp;quot;/testing&amp;quot;, startPage) route.Run(&amp;quot;:8085&amp;quot;) } func startPage(c *gin.Context) { var person Person // If `GET`, only `Form` binding engine (`query`) used. // If `POST`, first checks the `content-type` for `JSON` or `XML`, then uses `Form` (`form-data`). // See more at https://github.</description>
+    </item>
+    
+    <item>
+      <title>HTML checkboxes</title>
+      <link>https://gin-gonic.com/documentation/binding/checkboxes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/binding/checkboxes/</guid>
+      <description>See the detail information
+main.go
+... type myForm struct { Colors []string `form:&amp;quot;colors[]&amp;quot;` } ... func formHandler(c *gin.Context) { var fakeForm myForm c.ShouldBind(&amp;amp;fakeForm) c.JSON(200, gin.H{&amp;quot;color&amp;quot;: fakeForm.Colors}) } ...  form.html
+&amp;lt;form action=&amp;quot;/&amp;quot; method=&amp;quot;POST&amp;quot;&amp;gt; &amp;lt;p&amp;gt;Check some colors&amp;lt;/p&amp;gt; &amp;lt;label for=&amp;quot;red&amp;quot;&amp;gt;Red&amp;lt;/label&amp;gt; &amp;lt;input type=&amp;quot;checkbox&amp;quot; name=&amp;quot;colors[]&amp;quot; value=&amp;quot;red&amp;quot; id=&amp;quot;red&amp;quot; /&amp;gt; &amp;lt;label for=&amp;quot;green&amp;quot;&amp;gt;Green&amp;lt;/label&amp;gt; &amp;lt;input type=&amp;quot;checkbox&amp;quot; name=&amp;quot;colors[]&amp;quot; value=&amp;quot;green&amp;quot; id=&amp;quot;green&amp;quot; /&amp;gt; &amp;lt;label for=&amp;quot;blue&amp;quot;&amp;gt;Blue&amp;lt;/label&amp;gt; &amp;lt;input type=&amp;quot;checkbox&amp;quot; name=&amp;quot;colors[]&amp;quot; value=&amp;quot;blue&amp;quot; id=&amp;quot;blue&amp;quot; /&amp;gt; &amp;lt;input type=&amp;quot;submit&amp;quot; /&amp;gt; &amp;lt;/form&amp;gt;  result:
+{&amp;quot;color&amp;quot;:[&amp;quot;red&amp;quot;,&amp;quot;green&amp;quot;,&amp;quot;blue&amp;quot;]}  </description>
+    </item>
+    
+    <item>
+      <title>Multipart/Urlencoded</title>
+      <link>https://gin-gonic.com/documentation/binding/multipart/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/binding/multipart/</guid>
+      <description>package main import ( &amp;quot;github.com/gin-gonic/gin&amp;quot; ) type LoginForm struct { User string `form:&amp;quot;user&amp;quot; binding:&amp;quot;required&amp;quot;` Password string `form:&amp;quot;password&amp;quot; binding:&amp;quot;required&amp;quot;` } func main() { router := gin.Default() router.POST(&amp;quot;/login&amp;quot;, func(c *gin.Context) { // you can bind multipart form with explicit binding declaration: // c.ShouldBindWith(&amp;amp;form, binding.Form) // or you can simply use autobinding with ShouldBind method: var form LoginForm // in this case proper binding will be automatically selected if c.ShouldBind(&amp;amp;form) == nil { if form.</description>
+    </item>
+    
+    <item>
+      <title>Custom struct</title>
+      <link>https://gin-gonic.com/documentation/binding/custom_struct/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/binding/custom_struct/</guid>
+      <description>The following example will show how to bind data using custom struct
+type StructA struct { FieldA string `form:&amp;quot;field_a&amp;quot;` } type StructB struct { NestedStruct StructA FieldB string `form:&amp;quot;field_b&amp;quot;` } type StructC struct { NestedStructPointer *StructA FieldC string `form:&amp;quot;field_c&amp;quot;` } type StructD struct { NestedAnonyStruct struct { FieldX string `form:&amp;quot;field_x&amp;quot;` } FieldD string `form:&amp;quot;field_d&amp;quot;` } func GetDataB(c *gin.Context) { var b StructB c.Bind(&amp;amp;b) c.JSON(200, gin.H{ &amp;quot;a&amp;quot;: b.NestedStruct, &amp;quot;b&amp;quot;: b.FieldB, }) } func GetDataC(c *gin.</description>
+    </item>
+    
+    <item>
+      <title>Multiple binding</title>
+      <link>https://gin-gonic.com/documentation/binding/multiple_binding/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/binding/multiple_binding/</guid>
+      <description>The normal methods for binding consume c.Request.Body and they cannot be called multiple times.
+type formA struct { Foo string `json:&amp;quot;foo&amp;quot; xml:&amp;quot;foo&amp;quot; binding:&amp;quot;required&amp;quot;` } type formB struct { Bar string `json:&amp;quot;bar&amp;quot; xml:&amp;quot;bar&amp;quot; binding:&amp;quot;required&amp;quot;` } func SomeHandler(c *gin.Context) { objA := formA{} objB := formB{} // This c.ShouldBind consumes c.Request.Body and it cannot be reused. if errA := c.ShouldBind(&amp;amp;objA); errA == nil { c.String(http.StatusOK, `the body should be formA`) // Always an error is occurred by this because c.</description>
+    </item>
+    
+  </channel>
+</rss>

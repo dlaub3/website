@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+
+
+<title>Different formats</title>
+
+<meta name="generator" content="Hugo 0.50-DEV" />
+
+
+<link rel="stylesheet" href="https://gin-gonic.com/css/owl.carousel.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace-local-fonts.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/style.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/ionicons.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/animate.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/responsive.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/syntax.css" />
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="https://gin-gonic.com/js/bootstrap.min.js"></script>
+<script src="https://gin-gonic.com/js/owl.carousel.min.js"></script>
+<script src="https://gin-gonic.com/js/plugins.js"></script>
+<script src="https://gin-gonic.com/js/min/waypoints.min.js"></script>
+<script src="https://gin-gonic.com/js/jquery.counterup.js"></script>
+
+
+<script src="https://gin-gonic.com/js/main.js"></script>
+
+
+
+</head>
+<body>
+
+	
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://gin-gonic.com/">
+              <img src="https://gin-gonic.com/img/logo.png" alt="Gin Web Framework Logo">
+            </a>
+          </div>
+            
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://gin-gonic.com/">Home</a></li>
+              
+                <li><a href="/documentation/">Documentation</a></li>
+              
+                <li><a href="#/">Middleware</a></li>
+              
+                <li><a href="#/">Github</a></li>
+              
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+	<div class="post">
+	  
+	  <section class="section" style="border: 1px dotted #ddd;">
+	    <div class="container">
+	      <div class="row">
+	        <div>
+	          <div class="block">
+							
+	            <h1>Different formats</h1>
+	            <div class="post-info-wrapper">
+	              <p class="italic">By <span class="bold"></span> on <span class="bold">Jan 1, 0001</span></p>
+	            </div>
+	            <hr />
+	            <p><p>Responding can be as easy as passing just the <code>Status</code> code and a <code>structure</code> representing
+the data you want to send.</p>
+
+<pre><code class="language-go">func main() {
+	r := gin.Default()
+
+	// gin.H is a shortcut for map[string]interface{}
+	r.GET(&quot;/someJSON&quot;, func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{&quot;message&quot;: &quot;hey&quot;, &quot;status&quot;: http.StatusOK})
+	})
+
+	r.GET(&quot;/moreJSON&quot;, func(c *gin.Context) {
+		// You also can use a struct
+		var msg struct {
+			Name    string `json:&quot;user&quot;`
+			Message string
+			Number  int
+		}
+		msg.Name = &quot;Lena&quot;
+		msg.Message = &quot;hey&quot;
+		msg.Number = 123
+		// Note that msg.Name becomes &quot;user&quot; in the JSON
+		// Will output  :   {&quot;user&quot;: &quot;Lena&quot;, &quot;Message&quot;: &quot;hey&quot;, &quot;Number&quot;: 123}
+		c.JSON(http.StatusOK, msg)
+	})
+
+	r.GET(&quot;/someXML&quot;, func(c *gin.Context) {
+		c.XML(http.StatusOK, gin.H{&quot;message&quot;: &quot;hey&quot;, &quot;status&quot;: http.StatusOK})
+	})
+
+	r.GET(&quot;/someYAML&quot;, func(c *gin.Context) {
+		c.YAML(http.StatusOK, gin.H{&quot;message&quot;: &quot;hey&quot;, &quot;status&quot;: http.StatusOK})
+	})
+
+	r.GET(&quot;/someProtoBuf&quot;, func(c *gin.Context) {
+		reps := []int64{int64(1), int64(2)}
+		label := &quot;test&quot;
+		// The specific definition of protobuf is written in the testdata/protoexample file.
+		data := &amp;protoexample.Test{
+			Label: &amp;label,
+			Reps:  reps,
+		}
+		// Note that data becomes binary data in the response
+		// Will output protoexample.Test protobuf serialized data
+		c.ProtoBuf(http.StatusOK, data)
+	})
+
+	// Listen and serve on 0.0.0.0:8080
+	r.Run(&quot;:8080&quot;)
+}
+</code></pre>
+</p>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </section>
+	</div>
+	<p class="center-text" style="padding: 30px;">
+	  <a class="btn btn-main" href="https://gin-gonic.com/documentation/response/">Back to Response</a>
+	</p>
+
+	
+
+	
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            
+            <li><a href="#">About</a></li>
+            
+            <li><a href="#">Gitter</a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by Themefisher. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

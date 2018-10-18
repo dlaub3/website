@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+
+
+<title>Graceful restart</title>
+
+<meta name="generator" content="Hugo 0.50-DEV" />
+
+
+<link rel="stylesheet" href="https://gin-gonic.com/css/owl.carousel.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace-local-fonts.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/style.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/ionicons.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/animate.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/responsive.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/syntax.css" />
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="https://gin-gonic.com/js/bootstrap.min.js"></script>
+<script src="https://gin-gonic.com/js/owl.carousel.min.js"></script>
+<script src="https://gin-gonic.com/js/plugins.js"></script>
+<script src="https://gin-gonic.com/js/min/waypoints.min.js"></script>
+<script src="https://gin-gonic.com/js/jquery.counterup.js"></script>
+
+
+<script src="https://gin-gonic.com/js/main.js"></script>
+
+
+
+</head>
+<body>
+
+	
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://gin-gonic.com/">
+              <img src="https://gin-gonic.com/img/logo.png" alt="Gin Web Framework Logo">
+            </a>
+          </div>
+            
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://gin-gonic.com/">Home</a></li>
+              
+                <li><a href="/documentation/">Documentation</a></li>
+              
+                <li><a href="#/">Middleware</a></li>
+              
+                <li><a href="#/">Github</a></li>
+              
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+	<div class="post">
+	  
+	  <section class="section" style="border: 1px dotted #ddd;">
+	    <div class="container">
+	      <div class="row">
+	        <div>
+	          <div class="block">
+							
+	            <h1>Graceful restart</h1>
+	            <div class="post-info-wrapper">
+	              <p class="italic">By <span class="bold"></span> on <span class="bold">Jan 1, 0001</span></p>
+	            </div>
+	            <hr />
+	            <p><p>Do you want to graceful restart or stop your web server?
+There are some ways this can be done.</p>
+
+<p>We can use <a href="https://github.com/fvbock/endless">fvbock/endless</a> to replace the default <code>ListenAndServe</code>. Refer issue <a href="https://github.com/gin-gonic/gin/issues/296">#296</a> for more details.</p>
+
+<pre><code class="language-go">router := gin.Default()
+router.GET(&quot;/&quot;, handler)
+// [...]
+endless.ListenAndServe(&quot;:4242&quot;, router)
+</code></pre>
+
+<p>An alternative to endless:</p>
+
+<ul>
+<li><a href="https://github.com/braintree/manners">manners</a>: A polite Go HTTP server that shuts down gracefully.</li>
+<li><a href="https://github.com/tylerb/graceful">graceful</a>: Graceful is a Go package enabling graceful shutdown of an http.Handler server.</li>
+<li><a href="https://github.com/facebookgo/grace">grace</a>: Graceful restart &amp; zero downtime deploy for Go servers.</li>
+</ul>
+
+<p>If you are using Go 1.8, you may not need to use this library! Consider using http.Server&rsquo;s built-in <a href="https://golang.org/pkg/net/http/#Server.Shutdown">Shutdown()</a> method for graceful shutdowns. See the full <a href="./examples/graceful-shutdown">graceful-shutdown</a> example with gin.</p>
+
+<pre><code class="language-go">// +build go1.8
+
+package main
+
+import (
+	&quot;context&quot;
+	&quot;log&quot;
+	&quot;net/http&quot;
+	&quot;os&quot;
+	&quot;os/signal&quot;
+	&quot;time&quot;
+
+	&quot;github.com/gin-gonic/gin&quot;
+)
+
+func main() {
+	router := gin.Default()
+	router.GET(&quot;/&quot;, func(c *gin.Context) {
+		time.Sleep(5 * time.Second)
+		c.String(http.StatusOK, &quot;Welcome Gin Server&quot;)
+	})
+
+	srv := &amp;http.Server{
+		Addr:    &quot;:8080&quot;,
+		Handler: router,
+	}
+
+	go func() {
+		// service connections
+		if err := srv.ListenAndServe(); err != nil &amp;&amp; err != http.ErrServerClosed {
+			log.Fatalf(&quot;listen: %s\n&quot;, err)
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server with
+	// a timeout of 5 seconds.
+	quit := make(chan os.Signal)
+	signal.Notify(quit, os.Interrupt)
+	&lt;-quit
+	log.Println(&quot;Shutdown Server ...&quot;)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatal(&quot;Server Shutdown:&quot;, err)
+	}
+	log.Println(&quot;Server exiting&quot;)
+}
+</code></pre>
+</p>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </section>
+	</div>
+	<p class="center-text" style="padding: 30px;">
+	  <a class="btn btn-main" href="https://gin-gonic.com/documentation/extra/">Back to Extra</a>
+	</p>
+
+	
+
+	
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            
+            <li><a href="#">About</a></li>
+            
+            <li><a href="#">Gitter</a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by Themefisher. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

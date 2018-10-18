@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Middleware on Gin Web Framework</title>
+    <link>https://gin-gonic.com/documentation/middleware/</link>
+    <description>Recent content in Middleware on Gin Web Framework</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://gin-gonic.com/documentation/middleware/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Log middleware</title>
+      <link>https://gin-gonic.com/documentation/middleware/custom_middleware/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/middleware/custom_middleware/</guid>
+      <description>This simple middleware will print the Status code we send for each request
+func Logger() gin.HandlerFunc { return func(c *gin.Context) { t := time.Now() // Set example variable c.Set(&amp;quot;example&amp;quot;, &amp;quot;12345&amp;quot;) // before request c.Next() // after request latency := time.Since(t) log.Print(latency) // access the status we are sending status := c.Writer.Status() log.Println(status) } } func main() { r := gin.New() r.Use(Logger()) r.GET(&amp;quot;/test&amp;quot;, func(c *gin.Context) { example := c.MustGet(&amp;quot;example&amp;quot;).(string) // it would print: &amp;quot;12345&amp;quot; log.</description>
+    </item>
+    
+    <item>
+      <title>BasicAuth</title>
+      <link>https://gin-gonic.com/documentation/middleware/basic_auth/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/middleware/basic_auth/</guid>
+      <description>Using BasicAuth() middleware
+// simulate some private data var secrets = gin.H{ &amp;quot;foo&amp;quot;: gin.H{&amp;quot;email&amp;quot;: &amp;quot;foo@bar.com&amp;quot;, &amp;quot;phone&amp;quot;: &amp;quot;123433&amp;quot;}, &amp;quot;austin&amp;quot;: gin.H{&amp;quot;email&amp;quot;: &amp;quot;austin@example.com&amp;quot;, &amp;quot;phone&amp;quot;: &amp;quot;666&amp;quot;}, &amp;quot;lena&amp;quot;: gin.H{&amp;quot;email&amp;quot;: &amp;quot;lena@guapa.com&amp;quot;, &amp;quot;phone&amp;quot;: &amp;quot;523443&amp;quot;}, } func main() { r := gin.Default() // Group using gin.BasicAuth() middleware // gin.Accounts is a shortcut for map[string]string authorized := r.Group(&amp;quot;/admin&amp;quot;, gin.BasicAuth(gin.Accounts{ &amp;quot;foo&amp;quot;: &amp;quot;bar&amp;quot;, &amp;quot;austin&amp;quot;: &amp;quot;1234&amp;quot;, &amp;quot;lena&amp;quot;: &amp;quot;hello2&amp;quot;, &amp;quot;manu&amp;quot;: &amp;quot;4321&amp;quot;, })) // /admin/secrets endpoint // hit &amp;quot;localhost:8080/admin/secrets authorized.GET(&amp;quot;/secrets&amp;quot;, func(c *gin.Context) { // get user, it was set by the BasicAuth middleware user := c.</description>
+    </item>
+    
+    <item>
+      <title>With goroutines</title>
+      <link>https://gin-gonic.com/documentation/middleware/goroutines/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gin-gonic.com/documentation/middleware/goroutines/</guid>
+      <description>When starting new Goroutines inside a middleware or handler, you SHOULD NOT use the original context inside it, you have to use a read-only copy.
+func main() { r := gin.Default() r.GET(&amp;quot;/long_async&amp;quot;, func(c *gin.Context) { // create copy to be used inside the goroutine cCp := c.Copy() go func() { // simulate a long task with time.Sleep(). 5 seconds time.Sleep(5 * time.Second) // note that you are using the copied context &amp;quot;cCp&amp;quot;, IMPORTANT log.</description>
+    </item>
+    
+  </channel>
+</rss>

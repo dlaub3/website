@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+
+
+<title>Custom struct</title>
+
+<meta name="generator" content="Hugo 0.50-DEV" />
+
+
+<link rel="stylesheet" href="https://gin-gonic.com/css/owl.carousel.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace-local-fonts.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/style.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/ionicons.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/animate.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/responsive.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/syntax.css" />
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="https://gin-gonic.com/js/bootstrap.min.js"></script>
+<script src="https://gin-gonic.com/js/owl.carousel.min.js"></script>
+<script src="https://gin-gonic.com/js/plugins.js"></script>
+<script src="https://gin-gonic.com/js/min/waypoints.min.js"></script>
+<script src="https://gin-gonic.com/js/jquery.counterup.js"></script>
+
+
+<script src="https://gin-gonic.com/js/main.js"></script>
+
+
+
+</head>
+<body>
+
+	
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://gin-gonic.com/">
+              <img src="https://gin-gonic.com/img/logo.png" alt="Gin Web Framework Logo">
+            </a>
+          </div>
+            
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://gin-gonic.com/">Home</a></li>
+              
+                <li><a href="/documentation/">Documentation</a></li>
+              
+                <li><a href="#/">Middleware</a></li>
+              
+                <li><a href="#/">Github</a></li>
+              
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+	<div class="post">
+	  
+	  <section class="section" style="border: 1px dotted #ddd;">
+	    <div class="container">
+	      <div class="row">
+	        <div>
+	          <div class="block">
+							
+	            <h1>Custom struct</h1>
+	            <div class="post-info-wrapper">
+	              <p class="italic">By <span class="bold"></span> on <span class="bold">Jan 1, 0001</span></p>
+	            </div>
+	            <hr />
+	            <p><p>The following example will show how to bind data using custom struct</p>
+
+<pre><code class="language-go">type StructA struct {
+	FieldA string `form:&quot;field_a&quot;`
+}
+
+type StructB struct {
+	NestedStruct StructA
+	FieldB string `form:&quot;field_b&quot;`
+}
+
+type StructC struct {
+	NestedStructPointer *StructA
+	FieldC string `form:&quot;field_c&quot;`
+}
+
+type StructD struct {
+	NestedAnonyStruct struct {
+		FieldX string `form:&quot;field_x&quot;`
+	}
+	FieldD string `form:&quot;field_d&quot;`
+}
+
+func GetDataB(c *gin.Context) {
+	var b StructB
+	c.Bind(&amp;b)
+	c.JSON(200, gin.H{
+		&quot;a&quot;: b.NestedStruct,
+		&quot;b&quot;: b.FieldB,
+	})
+}
+
+func GetDataC(c *gin.Context) {
+	var b StructC
+	c.Bind(&amp;b)
+	c.JSON(200, gin.H{
+		&quot;a&quot;: b.NestedStructPointer,
+		&quot;c&quot;: b.FieldC,
+	})
+}
+
+func GetDataD(c *gin.Context) {
+	var b StructD
+	c.Bind(&amp;b)
+	c.JSON(200, gin.H{
+		&quot;x&quot;: b.NestedAnonyStruct,
+		&quot;d&quot;: b.FieldD,
+	})
+}
+
+func main() {
+	r := gin.Default()
+	r.GET(&quot;/getb&quot;, GetDataB)
+	r.GET(&quot;/getc&quot;, GetDataC)
+	r.GET(&quot;/getd&quot;, GetDataD)
+
+	r.Run()
+}
+</code></pre>
+
+<p>Using the command <code>curl</code> command result:</p>
+
+<pre><code class="language-bash">$ curl &quot;http://localhost:8080/getb?field_a=hello&amp;field_b=world&quot;
+{&quot;a&quot;:{&quot;FieldA&quot;:&quot;hello&quot;},&quot;b&quot;:&quot;world&quot;}
+$ curl &quot;http://localhost:8080/getc?field_a=hello&amp;field_c=world&quot;
+{&quot;a&quot;:{&quot;FieldA&quot;:&quot;hello&quot;},&quot;c&quot;:&quot;world&quot;}
+$ curl &quot;http://localhost:8080/getd?field_x=hello&amp;field_d=world&quot;
+{&quot;d&quot;:&quot;world&quot;,&quot;x&quot;:{&quot;FieldX&quot;:&quot;hello&quot;}}
+</code></pre>
+
+<div class="warning">Do not support the following style</div>
+
+<pre><code class="language-go">type StructX struct {
+	X struct {} `form:&quot;name_x&quot;` // HERE have form
+}
+
+type StructY struct {
+	Y StructX `form:&quot;name_y&quot;` // HERE have form
+}
+
+type StructZ struct {
+	Z *StructZ `form:&quot;name_z&quot;` // HERE have form
+}
+</code></pre>
+
+<p>In a word, only support nested custom struct which have no <code>form</code> tag.</p>
+</p>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </section>
+	</div>
+	<p class="center-text" style="padding: 30px;">
+	  <a class="btn btn-main" href="https://gin-gonic.com/documentation/binding/">Back to Binding data</a>
+	</p>
+
+	
+
+	
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            
+            <li><a href="#">About</a></li>
+            
+            <li><a href="#">Gitter</a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by Themefisher. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

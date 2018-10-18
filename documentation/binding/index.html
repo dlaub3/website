@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+
+
+<title>Binding data</title>
+
+<meta name="generator" content="Hugo 0.50-DEV" />
+
+
+<link rel="stylesheet" href="https://gin-gonic.com/css/owl.carousel.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace-local-fonts.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/style.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/ionicons.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/animate.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/responsive.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/syntax.css" />
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="https://gin-gonic.com/js/bootstrap.min.js"></script>
+<script src="https://gin-gonic.com/js/owl.carousel.min.js"></script>
+<script src="https://gin-gonic.com/js/plugins.js"></script>
+<script src="https://gin-gonic.com/js/min/waypoints.min.js"></script>
+<script src="https://gin-gonic.com/js/jquery.counterup.js"></script>
+
+
+<script src="https://gin-gonic.com/js/main.js"></script>
+
+
+
+</head>
+<body>
+
+	
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://gin-gonic.com/">
+              <img src="https://gin-gonic.com/img/logo.png" alt="Gin Web Framework Logo">
+            </a>
+          </div>
+            
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://gin-gonic.com/">Home</a></li>
+              
+                <li><a href="/documentation/">Documentation</a></li>
+              
+                <li><a href="#/">Middleware</a></li>
+              
+                <li><a href="#/">Github</a></li>
+              
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+	
+<section id="global-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="block">
+                    <h1>Binding data</h1>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+	<section class="blog section">
+		<div class="container">
+		  <div class="row">
+			<p>To bind a request body into a type, use model binding. We currently support binding of JSON, XML and standard form values (foo=bar&amp;boo=baz).</p>
+
+<p>Gin uses <a href="https://github.com/go-playground/validator"><strong>go-playground/validator.v8</strong></a> for validation. Check the full docs on tags usage <a href="http://godoc.org/gopkg.in/go-playground/validator.v8#hdr-Baked_In_Validators_and_Tags">here</a>.</p>
+
+<p>Note that you need to set the corresponding binding tag on all fields you want to bind. For example, when binding from JSON, set <code>json:&quot;fieldname&quot;</code>.</p>
+
+<p>Also, Gin provides two sets of methods for binding:</p>
+
+<ul>
+<li><p><strong>Type</strong> - Must bind</p>
+
+<ul>
+<li><strong>Methods</strong> - <code>Bind</code>, <code>BindJSON</code>, <code>BindXML</code>, <code>BindQuery</code></li>
+<li><strong>Behavior</strong> - These methods use <code>MustBindWith</code> under the hood. If there is a binding error, the request is aborted with <code>c.AbortWithError(400, err).SetType(ErrorTypeBind)</code>. This sets the response status code to 400 and the <code>Content-Type</code> header is set to <code>text/plain; charset=utf-8</code>. Note that if you try to set the response code after this, it will result in a warning <code>[GIN-debug] [WARNING] Headers were already written. Wanted to override status code 400 with 422</code>. If you wish to have greater control over the behavior, consider using the <code>ShouldBind</code> equivalent method.</li>
+</ul></li>
+
+<li><p><strong>Type</strong> - Should bind</p>
+
+<ul>
+<li><strong>Methods</strong> - <code>ShouldBind</code>, <code>ShouldBindJSON</code>, <code>ShouldBindXML</code>, <code>ShouldBindQuery</code></li>
+<li><strong>Behavior</strong> - These methods use <code>ShouldBindWith</code> under the hood. If there is a binding error, the error is returned and it is the developer&rsquo;s responsibility to handle the request and error appropriately.</li>
+</ul></li>
+</ul>
+
+<p>When using the Bind-method, Gin tries to infer the binder depending on the Content-Type header. If you are sure what you are binding, you can use <code>MustBindWith</code> or <code>ShouldBindWith</code>.</p>
+
+<p>You can also specify that specific fields are required. If a field is decorated with <code>binding:&quot;required&quot;</code> and has a empty value when binding, an error will be returned.</p>
+
+<pre><code class="language-go">// Binding from JSON
+type Login struct {
+	User     string `form:&quot;user&quot; json:&quot;user&quot; xml:&quot;user&quot;  binding:&quot;required&quot;`
+	Password string `form:&quot;password&quot; json:&quot;password&quot; xml:&quot;password&quot; binding:&quot;required&quot;`
+}
+
+func main() {
+	router := gin.Default()
+
+	// Example for binding JSON ({&quot;user&quot;: &quot;manu&quot;, &quot;password&quot;: &quot;123&quot;})
+	router.POST(&quot;/loginJSON&quot;, func(c *gin.Context) {
+		var json Login
+		if err := c.ShouldBindJSON(&amp;json); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{&quot;error&quot;: err.Error()})
+			return
+		}
+
+		if json.User != &quot;manu&quot; || json.Password != &quot;123&quot; {
+			c.JSON(http.StatusUnauthorized, gin.H{&quot;status&quot;: &quot;unauthorized&quot;})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{&quot;status&quot;: &quot;you are logged in&quot;})
+	})
+
+	// Example for binding XML (
+	//	&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+	//	&lt;root&gt;
+	//		&lt;user&gt;user&lt;/user&gt;
+	//		&lt;password&gt;123&lt;/user&gt;
+	//	&lt;/root&gt;)
+	router.POST(&quot;/loginXML&quot;, func(c *gin.Context) {
+		var xml Login
+		if err := c.ShouldBindXML(&amp;xml); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{&quot;error&quot;: err.Error()})
+			return
+		}
+
+		if xml.User != &quot;manu&quot; || xml.Password != &quot;123&quot; {
+			c.JSON(http.StatusUnauthorized, gin.H{&quot;status&quot;: &quot;unauthorized&quot;})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{&quot;status&quot;: &quot;you are logged in&quot;})
+	})
+
+	// Example for binding a HTML form (user=manu&amp;password=123)
+	router.POST(&quot;/loginForm&quot;, func(c *gin.Context) {
+		var form Login
+		// This will infer what binder to use depending on the content-type header.
+		if err := c.ShouldBind(&amp;form); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{&quot;error&quot;: err.Error()})
+			return
+		}
+
+		if form.User != &quot;manu&quot; || form.Password != &quot;123&quot; {
+			c.JSON(http.StatusUnauthorized, gin.H{&quot;status&quot;: &quot;unauthorized&quot;})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{&quot;status&quot;: &quot;you are logged in&quot;})
+	})
+
+	// Listen and serve on 0.0.0.0:8080
+	router.Run(&quot;:8080&quot;)
+}
+</code></pre>
+
+<p><strong>Sample request</strong></p>
+
+<pre><code class="language-shell">$ curl -v -X POST \
+  http://localhost:8080/loginJSON \
+  -H 'content-type: application/json' \
+  -d '{ &quot;user&quot;: &quot;manu&quot; }'
+&gt; POST /loginJSON HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.51.0
+&gt; Accept: */*
+&gt; content-type: application/json
+&gt; Content-Length: 18
+&gt;
+* upload completely sent off: 18 out of 18 bytes
+&lt; HTTP/1.1 400 Bad Request
+&lt; Content-Type: application/json; charset=utf-8
+&lt; Date: Fri, 04 Aug 2017 03:51:31 GMT
+&lt; Content-Length: 100
+&lt;
+{&quot;error&quot;:&quot;Key: 'Login.Password' Error:Field validation for 'Password' failed on the 'required' tag&quot;}
+</code></pre>
+
+<p><strong>Skip validate</strong></p>
+
+<p>When running the above example using the above the <code>curl</code> command, it returns error. Because the example use <code>binding:&quot;required&quot;</code> for <code>Password</code>. If use <code>binding:&quot;-&quot;</code> for <code>Password</code>, then it will not return error when running the above example again.</p>
+
+		  </div>
+		  <div class="row">
+			<div class="list-group">
+			  
+			  <h4>
+				<a href="https://gin-gonic.com/documentation/binding/custom_validators/" class="list-group-item list-group-item-action">
+				  Custom validators
+				</a>
+			  </h4>
+			  
+			  <h4>
+				<a href="https://gin-gonic.com/documentation/binding/query/" class="list-group-item list-group-item-action">
+				  From query
+				</a>
+			  </h4>
+			  
+			  <h4>
+				<a href="https://gin-gonic.com/documentation/binding/query_post/" class="list-group-item list-group-item-action">
+				  Query or post
+				</a>
+			  </h4>
+			  
+			  <h4>
+				<a href="https://gin-gonic.com/documentation/binding/checkboxes/" class="list-group-item list-group-item-action">
+				  HTML checkboxes
+				</a>
+			  </h4>
+			  
+			  <h4>
+				<a href="https://gin-gonic.com/documentation/binding/multipart/" class="list-group-item list-group-item-action">
+				  Multipart/Urlencoded
+				</a>
+			  </h4>
+			  
+			  <h4>
+				<a href="https://gin-gonic.com/documentation/binding/custom_struct/" class="list-group-item list-group-item-action">
+				  Custom struct
+				</a>
+			  </h4>
+			  
+			  <h4>
+				<a href="https://gin-gonic.com/documentation/binding/multiple_binding/" class="list-group-item list-group-item-action">
+				  Multiple binding
+				</a>
+			  </h4>
+			  
+			</div>
+		  </div>
+		  <div class="list-group">
+			
+		  </div>
+	</section>
+
+	
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            
+            <li><a href="#">About</a></li>
+            
+            <li><a href="#">Gitter</a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by Themefisher. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>

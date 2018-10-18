@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+
+
+<title>HTML</title>
+
+<meta name="generator" content="Hugo 0.50-DEV" />
+
+
+<link rel="stylesheet" href="https://gin-gonic.com/css/owl.carousel.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace-local-fonts.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/airspace.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/style.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/ionicons.min.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/animate.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/responsive.css" />
+<link rel="stylesheet" href="https://gin-gonic.com/css/syntax.css" />
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="https://gin-gonic.com/js/bootstrap.min.js"></script>
+<script src="https://gin-gonic.com/js/owl.carousel.min.js"></script>
+<script src="https://gin-gonic.com/js/plugins.js"></script>
+<script src="https://gin-gonic.com/js/min/waypoints.min.js"></script>
+<script src="https://gin-gonic.com/js/jquery.counterup.js"></script>
+
+
+<script src="https://gin-gonic.com/js/main.js"></script>
+
+
+
+</head>
+<body>
+
+	
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://gin-gonic.com/">
+              <img src="https://gin-gonic.com/img/logo.png" alt="Gin Web Framework Logo">
+            </a>
+          </div>
+            
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://gin-gonic.com/">Home</a></li>
+              
+                <li><a href="/documentation/">Documentation</a></li>
+              
+                <li><a href="#/">Middleware</a></li>
+              
+                <li><a href="#/">Github</a></li>
+              
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+	<div class="post">
+	  
+	  <section class="section" style="border: 1px dotted #ddd;">
+	    <div class="container">
+	      <div class="row">
+	        <div>
+	          <div class="block">
+							
+	            <h1>HTML</h1>
+	            <div class="post-info-wrapper">
+	              <p class="italic">By <span class="bold"></span> on <span class="bold">Jan 1, 0001</span></p>
+	            </div>
+	            <hr />
+	            <p>
+
+<p>Using LoadHTMLGlob() or LoadHTMLFiles()</p>
+
+<pre><code class="language-go">func main() {
+	router := gin.Default()
+	router.LoadHTMLGlob(&quot;templates/*&quot;)
+	//router.LoadHTMLFiles(&quot;templates/template1.html&quot;, &quot;templates/template2.html&quot;)
+	router.GET(&quot;/index&quot;, func(c *gin.Context) {
+		c.HTML(http.StatusOK, &quot;index.tmpl&quot;, gin.H{
+			&quot;title&quot;: &quot;Main website&quot;,
+		})
+	})
+	router.Run(&quot;:8080&quot;)
+}
+</code></pre>
+
+<p>templates/index.tmpl</p>
+
+<pre><code class="language-html">&lt;html&gt;
+	&lt;h1&gt;
+		{{ .title }}
+	&lt;/h1&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Using templates with same name in different directories</p>
+
+<pre><code class="language-go">func main() {
+	router := gin.Default()
+	router.LoadHTMLGlob(&quot;templates/**/*&quot;)
+	router.GET(&quot;/posts/index&quot;, func(c *gin.Context) {
+		c.HTML(http.StatusOK, &quot;posts/index.tmpl&quot;, gin.H{
+			&quot;title&quot;: &quot;Posts&quot;,
+		})
+	})
+	router.GET(&quot;/users/index&quot;, func(c *gin.Context) {
+		c.HTML(http.StatusOK, &quot;users/index.tmpl&quot;, gin.H{
+			&quot;title&quot;: &quot;Users&quot;,
+		})
+	})
+	router.Run(&quot;:8080&quot;)
+}
+</code></pre>
+
+<p>templates/posts/index.tmpl</p>
+
+<pre><code class="language-html">{{ define &quot;posts/index.tmpl&quot; }}
+&lt;html&gt;&lt;h1&gt;
+	{{ .title }}
+&lt;/h1&gt;
+&lt;p&gt;Using posts/index.tmpl&lt;/p&gt;
+&lt;/html&gt;
+{{ end }}
+</code></pre>
+
+<p>templates/users/index.tmpl</p>
+
+<pre><code class="language-html">{{ define &quot;users/index.tmpl&quot; }}
+&lt;html&gt;&lt;h1&gt;
+	{{ .title }}
+&lt;/h1&gt;
+&lt;p&gt;Using users/index.tmpl&lt;/p&gt;
+&lt;/html&gt;
+{{ end }}
+</code></pre>
+
+<h4 id="custom-template-renderer">Custom Template renderer</h4>
+
+<p>You can also use your own html template render</p>
+
+<pre><code class="language-go">import &quot;html/template&quot;
+
+func main() {
+	router := gin.Default()
+	html := template.Must(template.ParseFiles(&quot;file1&quot;, &quot;file2&quot;))
+	router.SetHTMLTemplate(html)
+	router.Run(&quot;:8080&quot;)
+}
+</code></pre>
+
+<h4 id="custom-delimiters">Custom Delimiters</h4>
+
+<p>You may use custom delims</p>
+
+<pre><code class="language-go">	r := gin.Default()
+	r.Delims(&quot;{[{&quot;, &quot;}]}&quot;)
+	r.LoadHTMLGlob(&quot;/path/to/templates&quot;))
+</code></pre>
+
+<h4 id="custom-template-funcs">Custom Template Funcs</h4>
+
+<p>See the detail <a href="examples/template">example code</a>.</p>
+
+<p>main.go</p>
+
+<pre><code class="language-go">import (
+	&quot;fmt&quot;
+	&quot;html/template&quot;
+	&quot;net/http&quot;
+	&quot;time&quot;
+
+	&quot;github.com/gin-gonic/gin&quot;
+)
+
+func formatAsDate(t time.Time) string {
+	year, month, day := t.Date()
+	return fmt.Sprintf(&quot;%d%02d/%02d&quot;, year, month, day)
+}
+
+func main() {
+	router := gin.Default()
+	router.Delims(&quot;{[{&quot;, &quot;}]}&quot;)
+	router.SetFuncMap(template.FuncMap{
+		&quot;formatAsDate&quot;: formatAsDate,
+	})
+	router.LoadHTMLFiles(&quot;./testdata/template/raw.tmpl&quot;)
+
+	router.GET(&quot;/raw&quot;, func(c *gin.Context) {
+		c.HTML(http.StatusOK, &quot;raw.tmpl&quot;, map[string]interface{}{
+			&quot;now&quot;: time.Date(2017, 07, 01, 0, 0, 0, 0, time.UTC),
+		})
+	})
+
+	router.Run(&quot;:8080&quot;)
+}
+
+</code></pre>
+
+<p>raw.tmpl</p>
+
+<pre><code class="language-html">Date: {[{.now | formatAsDate}]}
+</code></pre>
+
+<p>Result:</p>
+
+<pre><code class="language-bash">Date: 2017/07/01
+</code></pre>
+</p>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </section>
+	</div>
+	<p class="center-text" style="padding: 30px;">
+	  <a class="btn btn-main" href="https://gin-gonic.com/documentation/response/">Back to Response</a>
+	</p>
+
+	
+
+	
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            
+            <li><a href="#">About</a></li>
+            
+            <li><a href="#">Gitter</a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by Themefisher. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

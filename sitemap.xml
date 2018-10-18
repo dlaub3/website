@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/getting-started/</loc>
+    <lastmod>2018-09-25T16:57:20+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/getting-started/installation/</loc>
+    <lastmod>2018-09-25T16:57:20+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/extra/custom_config/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/binding/custom_validators/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/response/different_formats/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/middleware/custom_middleware/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/requests/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/middleware/basic_auth/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/binding/query/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/grouping_routes/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/extra/lets_encrypt/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/response/json/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/getting-started/quick_start/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/</loc>
+    <lastmod>2018-09-25T16:57:20+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/extra/multiple_servers/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/parameters_path/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/binding/query_post/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/response/static/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/getting-started/vendor/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/middleware/goroutines/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/response/reader/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/extra/graceful/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/binding/checkboxes/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/getting-started/jsoninter/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/response/html/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/binding/multipart/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/query_params/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/response/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/extra/single_binary/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/binding/custom_struct/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/multipart_form/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/response/multitemplate/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/extra/server_push/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/binding/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/extra/log_routes/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/binding/multiple_binding/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/query_form/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/query_post_map/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/middleware/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/uploading_files/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/middleware/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/log_file/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/router/redirect/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/extra/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/testing/</loc>
+    <lastmod>2018-09-25T16:57:20+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/documentation/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/</loc>
+    <lastmod>2018-09-25T16:57:20+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://gin-gonic.com/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>
